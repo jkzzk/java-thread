@@ -122,6 +122,21 @@ java中的锁状态：
 
 ## AQS AbstractQueuedSynchronizer
 
-1. 
+1. JUC核心类，Lock锁的实现机制，内部维护队列来实现多任务之间同步
+2. 内部维护了一个状态变量volatile int state 与 CLH（FIFO）线程等待队列
+3. 操作state的方法
+* getState()
+* setState()
+* compareAndSetState()
+4. AQS的两种获取资源的方式
+* Exclusive（独占，只有一个线程能执行，如ReentrantLock）
+* Share（共享，多个线程可同时执行，如Semaphore/CountDownLatch）
+5. 自定义同步器要实现的方法
+* isHeldExclusively()：该线程是否正在独占资源。只有用到condition才需要去实现它。
+* tryAcquire(int)：独占方式。尝试获取资源，成功则返回true，失败则返回false。
+* tryRelease(int)：独占方式。尝试释放资源，成功则返回true，失败则返回false。
+* tryAcquireShared(int)：共享方式。尝试获取资源。负数表示失败；0表示成功，但没有剩余可用资源；正数表示成功，且有剩余资源。
+* tryReleaseShared(int)：共享方式。尝试释放资源，如果释放后允许唤醒后续等待结点返回true，否则返回false。
+        
 
        
