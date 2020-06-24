@@ -79,4 +79,57 @@
         方法具有阻塞的特性，也就是说，当没有其他线程与其进行数据交换，它将一直阻塞等待。
     exchange（String x，long timeout，TimeUnit unit）
         timeout表示超时时间，unit表示时间的单位，使用该方法，在规定的时间内没有从其他线程获取数据，将抛出超时异常。
-```    
+``` 
+
+## ThreadLocal
+
+1. 线程作用域下存储变量的类，内部用map实现，key为对应线程，value为对应值
+
+2. 方法
+
+``` java
+
+    public void set(T value) 
+        设置值
+    public T get()
+        获取值
+    public void remove()
+        清空以存储数据
+
+```
+
+## fork/join 分治多任务框架
+
+1. 将大任务变为小任务然后，逐个小任务并行执行，最后汇总任务结果
+
+2. fork/join 线程池 ForkJoinPool
+
+* 构造方法
+
+    ``` java
+        public ForkJoinPool() 默认构造
+        
+        public ForkJoinPool(int parallelism)  参数为并行级别，不是线程池中的线程数
+    
+        public ForkJoinPool(int parallelism,
+                            ForkJoinWorkerThreadFactory factory,
+                            UncaughtExceptionHandler handler,
+                            boolean asyncMode) 
+            int parallelism 参数为并行级别，不是线程池中的线程数
+            factory： 线程工厂，生产线程的工厂，工厂类ForkJoinWorkerThreadFactory
+            handler：异常捕获处理器。当执行的任务中出现异常，并从任务中被抛出时，就会被handler捕获
+            asyncMode：这个参数也非常重要，从字面意思来看是指的异步模式，它并不是说Fork/Join框架是采用同步模式还是采用异步模式工作。
+                Fork/Join框架中为每一个独立工作的线程准备了对应的待执行任务队列，这个任务队列是使用数组进行组合的双向队列。
+                即是说存在于队列中的待执行任务，即可以使用先进先出的工作模式，也可以使用后进先出的工作模式。
+                默认为false，为后进先出，true为先进先出
+    ```
+
+* 方法
+fork/join 中采用递归执行的方式，创建子任务线程，然后将其加入到线程队列中，然后等待执行   
+
+    ``` java
+        public final ForkJoinTask<V> fork()  
+            将子任务线程插入执行队列中
+        public final V join()
+            将子任务值返回
+    ``` 
